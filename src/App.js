@@ -1,29 +1,32 @@
 import React, { Component } from 'react';
-import WeatherIcon from './components/WeatherIcon';
-import WeatherDetails from './components/WeatherDetails';
+import WeatherIcon from './components/WeatherIcon.jsx';
+import WeatherDetails from './components/WeatherDetails.jsx';
 import './App.css';
 
 class App extends Component {
-  state = {
-    icon: '',
-    time: 1,
-    city: '',
-    temperature: '',
-    weatherCode: '',
-    fetching: true
+  constructor(props) {
+    super(props);
+    this.state = {
+      icon: '',
+      time: 1,
+      country_name: '',
+      temperature: '',
+      weatherCode: '',
+      fetching: true
+    }
   }
 
   componentDidMount() {
     this.fetchIP();
   }
 
-  fetchWeatherData = city => {
+  fetchWeatherData = country_name => {
     const baseUrl = `http://api.openweathermap.org`;
     const path = `/data/2.5/weather`;
     const appId = `ff380fa0a26c755c7880e066db650f55`;
     const query = `units=metric&lang=ru&appid=${appId}`;
 
-    fetch(`${baseUrl}${path}?q=${city}&${query}`)
+    fetch(`${baseUrl}${path}?q=${country_name}&${query}`)
       .then(response => response.json())
       .then(data => {
         const date = new Date();
@@ -31,7 +34,7 @@ class App extends Component {
 
         this.setState({
           time,
-          city,
+          country_name,
           temperature: Math.round(data.main.temp),
           weatherCode: data.weather[0].id,
           fetching: false
@@ -43,15 +46,15 @@ class App extends Component {
   fetchIP = () => {
     fetch('//freegeoip.net/json/')
       .then(response => response.json())
-      .then(({ city }) => this.fetchWeatherData(city))
+      .then(({ country_name }) => this.fetchWeatherData(country_name))
       .catch(error => console.log(error));
   }
 
   render() {
-    const { fetching, icon, time, city, temperature, weatherCode } = this.state;
+    const { fetching, icon, time, country_name, temperature, weatherCode } = this.state;
 
-    return (
-      <div className='app'>Загрузка...</div>
+    return fetching ?
+      <div className='app'>Loading...</div>
       :
       <div className='app' data-hour={time}>
         <WeatherIcon
@@ -60,11 +63,10 @@ class App extends Component {
           time={time}
         />
         <WeatherDetails
-          city={city}
+          country_name={country_name}
           temperature={temperature}
         />
       </div>
-    );
   }
 }
 

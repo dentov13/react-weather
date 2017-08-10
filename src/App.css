@@ -71,8 +71,9 @@
   text-transform: uppercase;
 }
 
-.weather-details .city {
+.weather-details .country {
   font-size: 24px;
+  font-weight: 600;
   margin-bottom: 1rem;
 }
 

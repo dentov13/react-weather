@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   fetchWeatherData = country_name => {
-    const baseUrl = `http://api.openweathermap.org`;
+    const baseUrl = `https://api.openweathermap.org`;
     const path = `/data/2.5/weather`;
     const appId = `ff380fa0a26c755c7880e066db650f55`;
     const query = `units=metric&lang=ru&appid=${appId}`;
